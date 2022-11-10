@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "organizational_category",
+  "namespace": "epm-hrms.hrms",
+  "fields": [
+    {
+      "name": "datahub_attr_metadata_operation_id",
+      "type": "string"
+    },
+    {
+      "name": "datahub_attr_metadata_doc_id",
+      "type": "int"
+    },
+    {
+      "name": "datahub_attr_metadata_tt",
+      "type": "long"
+    },
+    {
+      "name": "datahub_attr_metadata_bt",
+      "type": "long"
+    }
+
+  ]
+}
+
+//hashMap_put("_datahub_attr_metadata_tt", OffsetDateTime_now()_toString());
+//hashMap_put("_datahub_attr_metadata_bt", OffsetDateTime_now()_toString());

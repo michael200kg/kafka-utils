@@ -1,0 +1,9 @@
+spring:
+  kafka:
+    template:
+      default-topic: epm-tmc.learnstudio.eventsAQUA
+    bootstrap-servers: http://localhost:9092
+    schema:
+      registry:
+        url: http://localhost:8081
+      default-schema-file: "schema.avsc"

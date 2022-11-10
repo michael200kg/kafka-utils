@@ -1,0 +1,7 @@
+spring:
+  kafka:
+    template:
+      topics:
+        - datafactory.datafactory-processor
+        - epm-hive.unified-notification
+    bootstrap-servers: http://localhost:9092

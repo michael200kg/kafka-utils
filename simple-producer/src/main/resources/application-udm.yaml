@@ -1,0 +1,6 @@
+spring:
+  kafka:
+    template:
+      topics:
+        - __eco_udm_configs
+    bootstrap-servers: http://localhost:9092

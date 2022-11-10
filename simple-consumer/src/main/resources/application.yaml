@@ -1,0 +1,10 @@
+spring:
+  kafka:
+    bootstrap-servers: http://localhost:9092
+    consumer:
+      topics:
+        topic1: ab_contact.txlog
+        topic2: epm-hive.unified-notification
+      groups:
+        group1: datahub.transformer.michael200kg
+        group2: epm-hive.unified-notification
