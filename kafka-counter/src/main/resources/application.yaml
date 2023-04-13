@@ -1,0 +1,4 @@
+spring:
+  properties:
+    bootstrap-servers: http://localhost:9092
+    topic: kafka-manager.test-topic-1

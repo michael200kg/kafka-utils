@@ -4,4 +4,6 @@ spring:
       topics:
         - datafactory.datafactory-processor
         - epm-hive.unified-notification
+      count: 60
+      partition-count: 6
     bootstrap-servers: http://localhost:9092

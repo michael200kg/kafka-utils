@@ -18,7 +18,7 @@ public class FindAllProducersTest {
 
     //@Test
     public void findAllProducersTest() {
-        List returnedClasses = findAllMatchingTypes(IKafkaProducer.class);
+        List returnedClasses = findAllMatchingTypes(KafkaProducer.class);
         Assertions.assertTrue(nonNull(returnedClasses),"returnedClasses is null");
         Assertions.assertTrue(returnedClasses.size()>0, "returnedClasses is empty");
     }
@@ -26,7 +26,7 @@ public class FindAllProducersTest {
     private <T> List<Class<? extends T>> findAllMatchingTypes(Class<T> toFind) {
         List<Class<?>> foundClasses = new ArrayList();
         List<Class<? extends T>> returnedClasses = new ArrayList<Class<? extends T>>();
-        Class clazz2 = IKafkaProducer.class;
+        Class clazz2 = KafkaProducer.class;
         //this.toFind = toFind;
         //walkClassPath();
         for(Class<?> clazz : foundClasses) {

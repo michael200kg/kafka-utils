@@ -2,6 +2,7 @@ package com.michael200kg.test.simpleproducer;
 
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.security.auth.SecurityProtocol;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@Profile("avro")
+@Profile({"avro", "km"})
 public class KafkaAvroProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
@@ -32,6 +33,10 @@ public class KafkaAvroProducerConfig {
         config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
         config.put("schema.registry.url", schemaRegistryUrl);
+        config.put("security.protocol","SASL_PLAINTEXT");
+        config.put("sasl.mechanism" , "PLAIN" );
+        config.put("sasl.jaas.config",
+                "org.apache.kafka.common.security.plain.PlainLoginModule required username='anonymousUser' password='admin';");
 
         return new DefaultKafkaProducerFactory<>(config);
     }

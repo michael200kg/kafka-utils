@@ -18,8 +18,27 @@
     {
       "name": "datahub_attr_metadata_bt",
       "type": "long"
+    },
+    {
+      "name": "datahub_attr_text",
+      "type": "string"
+    },
+    {
+      "name": "test_map", "type": {"type": "map", "values": "string"}
+    },
+    {
+      "name": "json_test",
+      "type": "string"
+    },
+    {
+      "name": "json_array_test",
+      "type": "string"
+    },
+    {
+      "name" : "phones",
+      "type" : [ "null", "string" ],
+      "default" : null
     }
-
   ]
 }
 

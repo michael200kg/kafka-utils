@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Primary
 @Profile("protobuf")
-public class KafkaProtobufProducer implements IKafkaProducer {
+public class KafkaProtobufProducer implements KafkaProducer {
 
     @Value("${spring.kafka.schema.default-schema-file}")
     private String schemaFileName;
@@ -35,7 +35,7 @@ public class KafkaProtobufProducer implements IKafkaProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void send(String topicName) {
+    public void send(String topicName, String key22, Integer partition) {
 
 
         Map<String, String> headers = GenerationUtils.generateHeadersMap();
@@ -43,7 +43,7 @@ public class KafkaProtobufProducer implements IKafkaProducer {
 
 
         map.keySet().forEach(key -> {
-            ProducerRecord<String, ProtobufRecord> record = new ProducerRecord<>(topicName, key, map.get(key));
+            ProducerRecord<String, ProtobufRecord> record = new ProducerRecord<>(topicName, partition, key, map.get(key));
             headers.keySet().forEach(key2 -> record.headers().add(key2, headers.get(key2).getBytes(StandardCharsets.UTF_8)));
             ListenableFuture<SendResult<String, ProtobufRecord>> future = kafkaTemplate.send(record);
             future.addCallback(new ListenableFutureCallback<>() {

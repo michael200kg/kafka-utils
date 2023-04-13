@@ -1,6 +1,5 @@
 package com.michael200kg.test.simpleproducer.kafka;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -12,36 +11,25 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import com.michael200kg.test.simpleproducer.utils.GenerationUtils;
-
 @Component
-@Profile({"topics"})
-public class KafkaSimpleProducer implements KafkaProducer {
+@Profile({"tombstone"})
+public class KafkaTombstoneProducer implements KafkaProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    private final Map<String, String> RECORDS = Map.of(
-            "consumer_group_lag_datahub.router.datafactory",
-            "{\"name\":\"consumer_group_lag_datahub.router.datafactory\",\"type\":\"CONSUMER_GROUP_LAG\",\"resourceName\":\"datahub.router.datafactory\",\"config\":{\"topicNames\":[\"datafactory.datafactory-processor\"]}}",
-            "topic_offset_increase_epm-hive.unified-notification",
-            "{\"name\":\"topic_offset_increase_epm-hive.unified-notification\",\"type\":\"TOPIC_OFFSET_INCREASE\",\"resourceName\":\"epm-hive.unified-notification\",\"config\":{}}"
-    );
-
     @Autowired
-    public KafkaSimpleProducer(KafkaTemplate<String, Object> kafkaTemplate) {
+    public KafkaTombstoneProducer(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public void send(String topicName, String key2, Integer partition) {
 
-        Map<String, String> headers = GenerationUtils.generateHeadersMap();
-        Map<String, Object> attributes = GenerationUtils.generateAttributesMap();
+        //Map<String, String> headers = GenerationUtils.generateHeadersMap();
+        //Map<String, Object> attributes = GenerationUtils.generateAttributesMap();
 
 
         //headers.keySet().forEach(key -> record.headers().add(key, headers.get(key).getBytes(StandardCharsets.UTF_8)));
-        RECORDS.forEach( (key, value) -> {
-
-            var record = new ProducerRecord<String, Object>(topicName, partition, key, value);
+           var record = new ProducerRecord<String, Object>(topicName, partition, "TOMBSTONE", null);
             ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(record);
             future.addCallback(new ListenableFutureCallback<>() {
                 @Override
@@ -55,6 +43,5 @@ public class KafkaSimpleProducer implements KafkaProducer {
                 }
             });
 
-        });
     }
 }

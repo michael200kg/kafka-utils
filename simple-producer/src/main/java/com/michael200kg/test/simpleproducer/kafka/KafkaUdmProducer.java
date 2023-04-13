@@ -1,6 +1,5 @@
 package com.michael200kg.test.simpleproducer.kafka;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -15,8 +14,8 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import com.michael200kg.test.simpleproducer.utils.GenerationUtils;
 
 @Component
-@Profile({"topics"})
-public class KafkaSimpleProducer implements KafkaProducer {
+@Profile({"udm"})
+public class KafkaUdmProducer implements KafkaProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -28,17 +27,12 @@ public class KafkaSimpleProducer implements KafkaProducer {
     );
 
     @Autowired
-    public KafkaSimpleProducer(KafkaTemplate<String, Object> kafkaTemplate) {
+    public KafkaUdmProducer(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public void send(String topicName, String key2, Integer partition) {
 
-        Map<String, String> headers = GenerationUtils.generateHeadersMap();
-        Map<String, Object> attributes = GenerationUtils.generateAttributesMap();
-
-
-        //headers.keySet().forEach(key -> record.headers().add(key, headers.get(key).getBytes(StandardCharsets.UTF_8)));
         RECORDS.forEach( (key, value) -> {
 
             var record = new ProducerRecord<String, Object>(topicName, partition, key, value);

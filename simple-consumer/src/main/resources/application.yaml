@@ -1,10 +1,15 @@
 spring:
   kafka:
     bootstrap-servers: http://localhost:9092
+    security.protocol: SASL_PLAINTEXT
     consumer:
       topics:
-        topic1: ab_contact.txlog
-        topic2: epm-hive.unified-notification
+        topic1: kafka-manager.test-topic-1
+        topic2: kafka-manager.test-topic-1
       groups:
-        group1: datahub.transformer.michael200kg
+        group1: datahub.transformer
         group2: epm-hive.unified-notification
+      properties:
+        sasl.mechanism: PLAIN
+        sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="anonymousUser" password="admin";
+        security.protocol: SASL_PLAINTEXT

@@ -1,16 +1,13 @@
 package com.michael200kg.test.simpleconsumer;
 
-import org.apache.kafka.common.serialization.ByteArrayDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 /**
  * @author Mikhail_Vershkov
@@ -43,6 +40,7 @@ public class KafkaConsumerConfiguration {
         return new DefaultKafkaConsumerFactory<>(
                 kafkaProperties.buildConsumerProperties(), new StringDeserializer(), new StringDeserializer()
         );
+        //org.apache.kafka.common.security.auth.SecurityProtocol
     }
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerStringContainerFactory() {

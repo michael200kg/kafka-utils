@@ -1,0 +1,46 @@
+spring:
+  kafka:
+    schema:
+      registry:
+        url: http://localhost:8081
+    template:
+      default-schema-file: "schema.avsc"
+      count: 60
+      partition-count: 6
+      topics:
+        - kafka-manager.test-topic-1
+#        - kafka-manager.test-topic-2
+#        - kafka-manager.test-topic-3
+#        - kafka-manager.test-topic-4
+#        - kafka-manager.test-topic-5
+#        - kafka-manager.test-topic-6
+#        - kafka-manager.test-topic-7
+#        - kafka-manager.test-topic-8
+#        - kafka-manager.test-topic-9
+#        - kafka-manager.test-topic-10
+#        - kafka-manager.test-topic-11
+#        - kafka-manager.test-topic-12
+#        - kafka-manager.test-topic-13
+#        - kafka-manager.test-topic-14
+#        - kafka-manager.test-topic-15
+#        - kafka-manager.test-topic-16
+#        - kafka-manager.test-topic-17
+#        - kafka-manager.test-topic-18
+#        - kafka-manager.test-topic-19
+#        - kafka-manager.test-topic-20
+#        - kafka-manager.test-topic-21
+#        - kafka-manager.test-topic-22
+#        - kafka-manager.test-topic-23
+#        - kafka-manager.test-topic-24
+#        - kafka-manager.test-topic-25
+#        - kafka-manager.test-topic-26
+#        - kafka-manager.test-topic-27
+#        - kafka-manager.test-topic-28
+#        - kafka-manager.test-topic-29
+#        - kafka-manager.test-topic-30
+    bootstrap-servers: http://localhost:9092
+
+    security.protocol: SASL_PLAINTEXT
+    sasl.mechanism: PLAIN
+    sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="anonymousUser" password="admin";
+

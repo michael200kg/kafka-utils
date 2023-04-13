@@ -5,8 +5,10 @@ import com.michael200kg.test.simpleproducer.utils.KafkaUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.avro.Schema;
+import org.apache.avro.SchemaBuilder;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.reflect.AvroSchema;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,13 +23,17 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 @Slf4j
 @Primary
-@Profile("avro")
-public class KafkaAvroProducer implements IKafkaProducer {
+@Profile({"avro", "km"})
+public class KafkaAvroProducer implements KafkaProducer {
 
     @Value("${spring.kafka.schema.default-schema-file}")
     private String schemaFileName;
@@ -39,7 +45,7 @@ public class KafkaAvroProducer implements IKafkaProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void send(String topicName) {
+    public void send(String topicName, String recordKey, Integer partition) {
 
         Map<String, String> headers = GenerationUtils.generateHeadersMap();
         Map<String, Object> attributes = GenerationUtils.generateAttributesMap();
@@ -48,8 +54,18 @@ public class KafkaAvroProducer implements IKafkaProducer {
         try {
             stringSchema = KafkaUtils.getSchemaFromFile(schemaFileName);
             Schema avroSchema = new Schema.Parser().parse(stringSchema);
+            List<Schema.Field> avroFields = new ArrayList<>(avroSchema.getFields());
 
-            GenericRecord genericRecord = new GenericData.Record(avroSchema);
+            SchemaBuilder.FieldAssembler fieldAssembler = SchemaBuilder.builder(avroSchema.getNamespace()).record("test").fields();
+            for(Schema.Field field: avroFields) {
+                fieldAssembler = fieldAssembler.nullableString(field.name(),"");
+            }
+            for(int ii=0;ii<100;ii++) {
+                fieldAssembler=fieldAssembler.nullableString("attribute_testing_for_a_long_value_"+ii,"");
+            }
+            Schema schema = (Schema)fieldAssembler.endRecord();
+
+            GenericRecord genericRecord = new GenericData.Record(schema);
 
             attributes.keySet().forEach(key -> {
                 if (attributes.get(key) instanceof OffsetDateTime) {
@@ -59,7 +75,7 @@ public class KafkaAvroProducer implements IKafkaProducer {
                 }
             });
 
-            var record = new ProducerRecord<String, Object>(topicName, "key-" + Math.round(Math.random() * 1000), genericRecord);
+            var record = new ProducerRecord<String, Object>(topicName, partition, recordKey, genericRecord);
             headers.keySet().forEach(key -> record.headers().add(key, headers.get(key).getBytes(StandardCharsets.UTF_8)));
             ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(record);
 

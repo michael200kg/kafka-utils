@@ -1,0 +1,45 @@
+spring:
+  kafka:
+    consumer:
+      group-id: transaction-test-group-id-1
+      topics:
+        - transaction-test.input-topic-1
+        - transaction-test.input-topic-2
+        - transaction-test.input-topic-3
+        - transaction-test.input-topic-4
+        - transaction-test.input-topic-5
+    bootstrap-servers: http://localhost:9092
+    producer:
+      out-topic: output-stream-test
+  cloud:
+    config:
+      import-check:
+        enabled: false
+    stream:
+      function:
+        bindings:
+          transformer-in-0: input
+      bindings:
+        transferer-in-0:
+          group: transaction-test.stream-group
+          destination: transaction-test.input-topic-1
+      kafka:
+        binder:
+          configuration:
+            security:
+              protocol: SASL_PLAINTEXT
+            sasl:
+              mechanism: PLAIN
+              jaas.config: "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"anonymousUser\" password=\"admin\";"
+          brokers: http://localhost:9092
+          auto-create-topics: false
+    function:
+      definition: transferer
+logging:
+  level:
+    root: info
+
+
+
+#  spring.cloud.stream.bindings.input.group=datahub.transformer.epm-crm
+#  spring.cloud.stream.bindings.input.destination=epm-crm.txlog

@@ -2,7 +2,7 @@ spring:
   kafka:
     template:
       topics:
-        - __eco_udm_configs
+        - kafka-manager.test-topic-1
       count: 1
       partition-count: 1
     bootstrap-servers: http://localhost:9092
